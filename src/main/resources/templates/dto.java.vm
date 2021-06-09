@@ -1,0 +1,55 @@
+package ${cfg.myPackage}.dto;
+
+
+#if(${swagger2})
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+#end
+#if(${entityLombokModel})
+import lombok.Data;
+import lombok.experimental.Accessors;
+#end
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @author ${author}
+ * @since ${cfg.dateTime}
+ * @describe $!{table.comment}入参
+ */
+#if(${entityLombokModel})
+@Data
+#end
+@Accessors(chain = true)
+#if(${swagger2})
+@ApiModel(value = "${entity}入参对象", description = "$!{table.comment}")
+#end
+
+public class ${entity}DTO implements Serializable{
+
+
+    private static final long serialVersionUID=1L;
+## ----------  BEGIN 字段循环遍历  ----------
+    #foreach($field in ${table.fields})
+    #if(${superEntityColumns.indexOf(${field.name})} != -1)
+
+        #if(${field.keyFlag})
+            #set($keyPropertyName=${field.propertyName})
+        #end
+        #if("$!field.comment" != "")
+            #if(${swagger2})
+            @ApiModelProperty(value = "${field.comment}")
+            #else
+            /**
+             * ${field.comment}
+             */
+            #end
+        #end
+    private ${field.propertyType} ${field.propertyName};
+    #end
+
+
+    #end
+## ----------  END 字段循环遍历  ----------
+
+}

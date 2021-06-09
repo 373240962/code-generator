@@ -1,0 +1,65 @@
+package ${cfg.myPackage}.client;
+
+
+import com.edison.saas.common.framework.web.controller.PageContent;
+import com.edison.saas.common.framework.web.controller.RestResponse;
+import com.edison.saas.common.framework.web.data.PageSearchRequest;
+import ${cfg.myPackage}.dto.${entity}DTO;
+import ${cfg.myPackage}.vo.${entity}VO;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * @author ${author}
+ * @since ${cfg.dateTime}
+ * @describe $!{table.comment}客户端
+ */
+@FeignClient(name = "EDISON-YXPROJECT-MICROSERVICE", path = "/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end", decode404 = true)
+public interface ${entity}Client{
+
+    /**
+     * 新增$!{table.comment}
+     *
+     * @param dto
+     * @return
+     */
+    @PostMapping("/save")
+    RestResponse<${entity}VO> save(@RequestBody ${entity}DTO dto);
+
+    /**
+     * 修改$!{table.comment}
+     *
+     * @param id
+     * @param dto
+     * @return
+     */
+    @PutMapping("/modify/{id}")
+    RestResponse<${entity}VO> modify(@PathVariable("id") String id, @RequestBody ${entity}DTO dto);
+
+    /**
+     * 删除$!{table.comment}
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/remove/{id}")
+    RestResponse remove(@PathVariable("id") String id);
+
+    /**
+     * 查询$!{table.comment}
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    RestResponse<${entity}VO> get(@PathVariable String id);
+
+    /**
+     * 分页查询$!{table.comment}
+     *
+     * @param pageSearchRequest
+     * @return
+     */
+    @PostMapping("/page")
+    RestResponse<PageContent<${entity}VO>> page(@RequestBody PageSearchRequest<${entity}DTO> pageSearchRequest);
+}
