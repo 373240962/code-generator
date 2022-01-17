@@ -21,7 +21,7 @@ public class CodeGenerator {
     /**
      * 代码生成位置
      */
-    public static final String PARENT_NAME = "com.edison.services.yxproject.business" ;
+    public static final String PARENT_NAME = "com.iotcomm.smart.lamp" ;
 
     /**
      * modular 名字
@@ -43,8 +43,7 @@ public class CodeGenerator {
      */
     private static final boolean REST_CONTROLLER_STYLE = true;
 
-    public static final String JDBC_MYSQL_URL = "jdbc:mysql://192.168.200.181:3306/edison-yxproject" +
-            "?useSSL=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true&characterEncoding=UTF-8&characterSetResults=UTF-8&allowMultiQueries=true" ;
+    public static final String JDBC_MYSQL_URL = "jdbc:mysql://192.168.200.35:3306/wuhan_sems_db?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8" ;
 
     public static final String JDBC_DRIVER_NAME = "com.mysql.cj.jdbc.Driver" ;
 
@@ -93,7 +92,7 @@ public class CodeGenerator {
                     @Override
                     public String outputFile(TableInfo tableInfo) {
                         // 自定义输出文件名，如果entity设置了前后缀，此次注意xml的名称也会跟着发生变化
-                        return projectPath + "/" + SRC_MAIN_JAVA + "/" + PARENT_NAME.replace(".","/") +  "/vo"
+                        return projectPath + "/" + SRC_MAIN_JAVA + "/" + PARENT_NAME.replace(".","/") +  "/model"
                                  + "/" + tableInfo.getEntityName() + "VO" + StringPool.DOT_JAVA;
                     }
                 });
@@ -105,14 +104,14 @@ public class CodeGenerator {
                                  + "/" + tableInfo.getEntityName() + "DTO" + StringPool.DOT_JAVA;
                     }
                 });
-                fileOutConfigList.add(new FileOutConfig("/templates/client.java.vm") {
-                    @Override
-                    public String outputFile(TableInfo tableInfo) {
-                        // 自定义输出文件名，如果entity设置了前后缀，此次注意xml的名称也会跟着发生变化
-                        return projectPath + "/"  + SRC_MAIN_JAVA + "/" + PARENT_NAME.replace(".","/") +  "/client"
-                                + "/" + tableInfo.getEntityName() + "Client" + StringPool.DOT_JAVA;
-                    }
-                });
+//                fileOutConfigList.add(new FileOutConfig("/templates/client.java.vm") {
+//                    @Override
+//                    public String outputFile(TableInfo tableInfo) {
+//                        // 自定义输出文件名，如果entity设置了前后缀，此次注意xml的名称也会跟着发生变化
+//                        return projectPath + "/"  + SRC_MAIN_JAVA + "/" + PARENT_NAME.replace(".","/") +  "/client"
+//                                + "/" + tableInfo.getEntityName() + "Client" + StringPool.DOT_JAVA;
+//                    }
+//                });
                 setFileOutConfigList(fileOutConfigList);
             }
         };
@@ -130,7 +129,7 @@ public class CodeGenerator {
                 .entityTableFieldAnnotationEnable(true)
                 .setEntityLombokModel(true)
                 .setSuperEntityClass(BaseEntity.class.getName())
-                .setSuperEntityColumns("create_at","modify_at","modify_uid","create_uid")
+                .setSuperEntityColumns("create_by","create_time","update_by","update_time","delete_by","delete_time")
                 .setLogicDeleteFieldName("deleted")
                 .setTablePrefix(tablePrefix + "_");
     }

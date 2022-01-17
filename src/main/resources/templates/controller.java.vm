@@ -66,10 +66,10 @@ public class ${table.controllerName} extends ${superControllerClass} {
         return ${entity}.parseVO(${entity.substring(0, 1).toLowerCase()}${entity.substring(1)});
     }
 
-    @DeleteMapping("/remove/{id}")
+    @DeleteMapping("/remove/{ids}")
     @ApiOperation("删除$!{table.comment}")
-    public void remove(@PathVariable String id) {
-        ${table.serviceName.substring(1, 2).toLowerCase()}${table.serviceName.substring(2)}.removeById(id);
+    public void remove(@PathVariable String ids) {
+        Arrays.stream(ids.split(",")).forEach(${table.serviceName.substring(1, 2).toLowerCase()}${table.serviceName.substring(2)} :: removeById);
     }
 
     @GetMapping("/{id}")
@@ -81,11 +81,11 @@ public class ${table.controllerName} extends ${superControllerClass} {
 
     @PostMapping("/page")
     @ApiOperation("分页查询$!{table.comment}")
-    public PageContent<${entity}VO> page(@RequestBody PageSearchRequest<${entity}DTO> pageSearchRequest) {
-        IPage<${entity}> page = PageHelp.of(pageSearchRequest);
-        ${entity}DTO serchDto = pageSearchRequest.getSearchCondition();
-        LambdaQueryWrapper<${entity}> queryWrapper = new LambdaQueryWrapper<${entity}>();
-        return PageUtil.toPage(${table.serviceName.substring(1, 2).toLowerCase()}${table.serviceName.substring(2)}.page(page, queryWrapper).convert(${entity}::parseVO));
+    public IPage<${entity}VO> page(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam String param) {
+        Map<String, Object> pMap = StrToMap.getMapByProperty(param);
+        IPage<${entity}> iPage = new Page<>(pageIndex, pageSize);
+
+        return ${table.serviceName.substring(1, 2).toLowerCase()}${table.serviceName.substring(2)}.page(iPage, new QueryWrapper<${entity}>().allEq(pMap)).convert(${entity}::parseVO);
     }
 
 }
